@@ -1,0 +1,20 @@
+CREATE TABLE portfolio (
+  id int(10) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  symbol varchar(10) NOT NULL,
+  shares int(10) NOT NULL,
+  price decimal(65,4) NOT NULL,
+  user_id int(10) UNSIGNED NOT NULL,
+  transacted timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE INDEX user_id ON portfolio (user_id);
+
+CREATE TABLE users (
+  id int(10) UNSIGNED PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  username varchar(16) NOT NULL,
+  hash varchar(255) NOT NULL,
+  cash decimal(65,4) UNSIGNED NOT NULL DEFAULT '0.0000'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
+CREATE UNIQUE INDEX username ON users (username);
+
+ALTER TABLE portfolio
+  ADD CONSTRAINT portfolio_ibfk_1 FOREIGN KEY (user_id) REFERENCES users (id) ON UPDATE CASCADE;
